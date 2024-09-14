@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EM Assignment 6 by Shivam Dwivedi</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .image-pair { display: flex; margin-bottom: 20px; }
+        .image-pair img { width: 200px; height: auto; margin-right: 10px; }
+        @media print {
+            .no-print { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <h1>EM Assignment 6 by Shivam Dwivedi</h1>
+    <div>
+        <label for="teamNumber">Team Number:</label>
+        <input type="text" id="teamNumber" name="teamNumber">
+    </div>
+    <div>
+        <label for="teamName">Team Name:</label>
+        <input type="text" id="teamName" name="teamName">
+    </div>
+    <div id="imageContainer"></div>
+    <button onclick="window.print()" class="no-print">Print/Save as PDF</button>
+
+    <script>
+        const imageContainer = document.getElementById('imageContainer');
+        for (let i = 1; i <= 30; i++) {
+            const pair = document.createElement('div');
+            pair.className = 'image-pair';
+            
+            const originalImg = document.createElement('img');
+            originalImg.src = `${i}.jpg`;
+            originalImg.alt = `Original Image ${i}`;
+            pair.appendChild(originalImg);
+            
+            const uploadedImg = document.createElement('img');
+            uploadedImg.src = '/api/placeholder/200/200?text=Upload+Image';
+            uploadedImg.alt = `Uploaded Image ${i}`;
+            pair.appendChild(uploadedImg);
+            
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            input.className = 'no-print';
+            input.onchange = function(event) {
+                if (event.target.files && event.target.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        uploadedImg.src = e.target.result;
+                    }
+                    reader.readAsDataURL(event.target.files[0]);
+                }
+            };
+            pair.appendChild(input);
+            
+            imageContainer.appendChild(pair);
+        }
+    </script>
+</body>
+</html>
